@@ -2,9 +2,11 @@
 import flickrapi
 import urllib.request
 from PIL import Image
+import csv
+import os
 # enter flickr API key and secret
-api_key = '<enter api_key>'
-api_secret = '<enter api_secret>'
+api_key = ''
+api_secret = ''
 flickr=flickrapi.FlickrAPI(api_key, api_secret, cache=True)
 
 # filter search by keyword to further limit scope of query 
@@ -49,19 +51,39 @@ for i in range(0,responseLen):
 imageIDs = []       
 latitudes = []
 longitudes = []
-for i, url in enumerate(photos):
+
+for i, url in enumerate(photos):   
     #image ID 
     imageID = url.attrib['id']
     imageIDs.append(imageID)
+    
     # latitude 
     latitude = url.attrib['latitude']
     latitudes.append(latitude)
     #longitude 
     longitude = url.attrib['longitude']
     longitudes.append(longitude)
+        
+    #csv parameters 
+    file_exists = os.path.isfile('img-metadata.csv')
+    with open('img-metadata.csv', 'a') as csvfile:
+        headers = ['id', 'imgName', 'latitude', 'longitude']
+        writer = csv.DictWriter(csvfile, delimiter=',', lineterminator='\n', fieldnames=headers)
+        if not file_exists:
+            writer.writeheader()
+            for i, url in enumerate(photos):
+                writer.writerow({
+                    'id': url.attrib['id'],
+                    'imgName': "img"+str(i), 
+                    'latitude': url.attrib['latitude'],
+                    'longitude': url.attrib['longitude']
+                })
+                if i > queryCutoff:
+                    break
+    # break the loop
     if i > queryCutoff:
         break
-print(imageIDs)
-print(latitudes)
-print(longitudes)
+
+
+
     
