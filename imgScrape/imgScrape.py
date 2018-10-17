@@ -5,10 +5,10 @@ import flickrapi
 import urllib.request
 from PIL import Image
 # enter flickr API key and secret
-flickr=flickrapi.FlickrAPI('api_key', 'api_secret', cache=True)
+flickr=flickrapi.FlickrAPI('<enter_api_key>', '<enter_api_secret>', cache=True)
 
-# search by keyword 
-#keyword = 'siberian husky'
+# filter search by keyword 
+keyword = 'tree'
 
 # NOTES: provide min_upload_date in UNIX timstamp, everything after is returned 
 # bbox = A comma-delimited list of 4 values defining the Bounding Box of the area that will be searched. The 4 values represent the bottom-left corner of the box and the top-right corner, minimum_longitude, minimum_latitude, maximum_longitude, maximum_latitude.
