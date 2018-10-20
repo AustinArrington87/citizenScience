@@ -14,7 +14,7 @@ keyword = 'squirrel'
 
 # set cutoff point for image query
 # the loop breaks if i > queryCutoff, so by setting to 3 - 5 photos are queried (as 0 is first index)
-queryCutoff = 60 
+queryCutoff = 75 
 
 # NOTES: provide min_upload_date in UNIX timstamp, everything after is returned 
 # bbox = A comma-delimited list of 4 values defining the Bounding Box of the area that will be searched. The 4 values represent the bottom-left corner of the box and the top-right corner, minimum_longitude, minimum_latitude, maximum_longitude, maximum_latitude.
@@ -47,16 +47,12 @@ print (urls)
 # download and resize photos to working directory 
 responseLen = len(urls)
 for i in range(0,responseLen):
-    if i != type(int):
-        i = int(i)
     try:
         urllib.request.urlretrieve(urls[i], str(i)+'.jpg')
-    except urllib.error.HTTPError as err:
-        print("There was an issue downloading img...")
-        print(err)
+        Image.open(str(i)+'.jpg').resize((256, 256), Image.ANTIALIAS).save(str(i)+'.jpg')
+    except:
+        pass
     
-    Image.open(str(i)+'.jpg').resize((256, 256), Image.ANTIALIAS).save(str(i)+'.jpg')
-
 # QUERY IMAGE METADATA 
 imageIDs = []       
 latitudes = []
