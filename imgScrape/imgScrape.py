@@ -22,9 +22,9 @@ queryCutoff = 75
 # min_upload_date == 01/01/2001
 
 photos = flickr.walk(
-                     #text=keyword,
-                     #tag_mode='all',
-                     #tags=keyword,
+                     text=keyword,
+                     tag_mode='all',
+                     tags=keyword,
                      min_upload_date = 978325200,
                      bbox = "-73.98171,40.76837,-73.94969,40.79656",
                      extras='url_c,geo',
