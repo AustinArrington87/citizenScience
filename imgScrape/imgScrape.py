@@ -5,6 +5,7 @@ from PIL import Image
 import csv
 import os
 # enter flickr API key and secret
+# create API Key here: https://www.flickr.com/services/apps/create/apply
 api_key = ''
 api_secret = ''
 flickr=flickrapi.FlickrAPI(api_key, api_secret, cache=True)
@@ -13,7 +14,6 @@ flickr=flickrapi.FlickrAPI(api_key, api_secret, cache=True)
 keyword = 'squirrel'
 
 # set cutoff point for image query
-# the loop breaks if i > queryCutoff, so by setting to 3 - 5 photos are queried (as 0 is first index)
 queryCutoff = 75 
 
 # NOTES: provide min_upload_date in UNIX timstamp, everything after is returned 
