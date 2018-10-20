@@ -20,6 +20,7 @@ queryCutoff = 75
 # bbox = A comma-delimited list of 4 values defining the Bounding Box of the area that will be searched. The 4 values represent the bottom-left corner of the box and the top-right corner, minimum_longitude, minimum_latitude, maximum_longitude, maximum_latitude.
 
 # min_upload_date == 01/01/2001
+# bbox in this example is for Central Park
 
 photos = flickr.walk(
                      text=keyword,
@@ -27,7 +28,7 @@ photos = flickr.walk(
                      tags=keyword,
                      min_upload_date = 978325200,
                      bbox = "-73.98171,40.76837,-73.94969,40.79656",
-                     extras='url_c,geo',
+                     extras='url_c,geo,date_taken',
                      per_page=100,           
                      sort='relevance'
                     )
@@ -57,11 +58,16 @@ for i in range(0,responseLen):
 imageIDs = []       
 latitudes = []
 longitudes = []
+dates = []
 
 for i, url in enumerate(photos):   
     #image ID 
     imageID = url.attrib['id']
     imageIDs.append(imageID)
+    
+    #datetaken
+    datetaken = url.attrib['datetaken']
+    dates.append(datetaken)
     
     # latitude 
     latitude = url.attrib['latitude']
@@ -73,13 +79,14 @@ for i, url in enumerate(photos):
     #csv parameters 
     file_exists = os.path.isfile('img-metadata.csv')
     with open('img-metadata.csv', 'a') as csvfile:
-        headers = ['id', 'imgName', 'latitude', 'longitude']
+        headers = ['id', 'datetaken', 'imgName', 'latitude', 'longitude']
         writer = csv.DictWriter(csvfile, delimiter=',', lineterminator='\n', fieldnames=headers)
         if not file_exists:
             writer.writeheader()
             for i, url in enumerate(photos):
                 writer.writerow({
                     'id': url.attrib['id'],
+                    'datetaken': url.attrib['datetaken'],
                     'imgName': str(i)+'.jpg', 
                     'latitude': url.attrib['latitude'],
                     'longitude': url.attrib['longitude']
