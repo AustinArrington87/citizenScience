@@ -29,8 +29,20 @@ def HSVColor(img):
         return Image.merge('RGB',(r,g,b))
     else:
         return None
+# working directory with files 
+filelist = os.listdir('/Users/austinarrington/citizenScience/imgScrape')
+print (filelist)
+# now take out file that aren't jpgs 
+for fichier in filelist[:]: # filelist[:] makes a copy of filelist.
+    if not(fichier.endswith(".jpg")):
+        filelist.remove(fichier)
+print(filelist)
 
-a = Image.open('0.jpg')
-b = HSVColor(a)
-b.save('0_HSV.jpg')
+# now do our HSV value conversions 
+
+for file in filelist:
+    #HSVColor(Image.open(file)
+    HSVColor(Image.open(file)).save('HSV_'+str(file))
+    
+       
 

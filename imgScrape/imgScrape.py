@@ -14,7 +14,7 @@ flickr=flickrapi.FlickrAPI(api_key, api_secret, cache=True)
 keyword = 'squirrel'
 
 # set cutoff point for image query
-queryCutoff = 200 
+queryCutoff = 5 
 
 # NOTES: provide min_upload_date in UNIX timstamp, everything after is returned 
 # bbox = A comma-delimited list of 4 values defining the Bounding Box of the area that will be searched. The 4 values represent the bottom-left corner of the box and the top-right corner, minimum_longitude, minimum_latitude, maximum_longitude, maximum_latitude.
