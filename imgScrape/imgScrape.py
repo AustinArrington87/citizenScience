@@ -79,13 +79,14 @@ for i, url in enumerate(photos):
     #csv parameters 
     file_exists = os.path.isfile('img-metadata.csv')
     with open('img-metadata.csv', 'a') as csvfile:
-        headers = ['id', 'datetaken', 'imgName', 'latitude', 'longitude']
+        headers = ['id', 'url', 'datetaken', 'imgName', 'latitude', 'longitude']
         writer = csv.DictWriter(csvfile, delimiter=',', lineterminator='\n', fieldnames=headers)
         if not file_exists:
             writer.writeheader()
             for i, url in enumerate(photos):
                 writer.writerow({
                     'id': url.attrib['id'],
+                    'url': 'http://flickr.com/photo.gne?id='+str(url.attrib['id']),
                     'datetaken': url.attrib['datetaken'],
                     'imgName': str(i)+'.jpg', 
                     'latitude': url.attrib['latitude'],
