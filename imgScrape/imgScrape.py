@@ -6,15 +6,15 @@ import csv
 import os
 # enter flickr API key and secret
 # create API Key here: https://www.flickr.com/services/apps/create/apply
-api_key = ''
-api_secret = ''
+api_key = 'db50051d6fd86734917c89ddffc01d04'
+api_secret = '421bcb14a3e801e7'
 flickr=flickrapi.FlickrAPI(api_key, api_secret, cache=True)
 
 # filter search by keyword to further limit scope of query 
-keyword = 'squirrel'
+keyword = 'solar'
 
 # set cutoff point for image query
-queryCutoff = 5 
+queryCutoff = 200 
 
 # NOTES: provide min_upload_date in UNIX timstamp, everything after is returned 
 # bbox = A comma-delimited list of 4 values defining the Bounding Box of the area that will be searched. The 4 values represent the bottom-left corner of the box and the top-right corner, minimum_longitude, minimum_latitude, maximum_longitude, maximum_latitude.
@@ -27,7 +27,7 @@ photos = flickr.walk(
                      tag_mode='all',
                      tags=keyword,
                      min_upload_date = 978325200,
-                     bbox = "-73.98171,40.76837,-73.94969,40.79656",
+                     bbox = "-156.05277778,19.07097778,-154.76694444,19.76135556",
                      extras='url_c,geo,date_taken',
                      per_page=100,           
                      sort='relevance'
