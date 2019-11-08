@@ -3,7 +3,7 @@ import numpy as np
 import csv
 import os
 from GPSPhoto import gpsphoto
-#data = gpsphoto.getGPSData('IMG-4115.jpg')
+from PIL import Image
 
 # working directory with files 
 filelist = os.listdir('/Users/austinarrington/citizenScience/color')
@@ -41,7 +41,7 @@ for i, file in enumerate(filelist):
     #print(listLen)
     file_exists = os.path.isfile('img-hsv.csv')
     with open('img-hsv.csv', 'a') as csvfile:
-        headers = ['file', 'hue', 'saturation', 'brightness', 'lat', 'lon', 'alt']
+        headers = ['file', 'hue', 'saturation', 'brightness', 'lat', 'lon', 'alt', 'date']
         writer = csv.DictWriter(csvfile, delimiter=',', lineterminator='\n', fieldnames=headers)
         if not file_exists:
             writer.writeheader()
@@ -56,6 +56,11 @@ for i, file in enumerate(filelist):
                     lat = None
                     lon = None
                     alt = None
+                # Date
+                try:
+                    date = Image.open(file)._getexif()[36867]
+                except:
+                    date = None
                 writer.writerow({
                     'file': file,
                     'hue': np.average(np.average(cv2.cvtColor(cv2.imread(file), cv2.COLOR_BGR2HSV), axis=0), axis=0)[0],
@@ -63,6 +68,7 @@ for i, file in enumerate(filelist):
                     'brightness': np.average(np.average(cv2.cvtColor(cv2.imread(file), cv2.COLOR_BGR2HSV), axis=0), axis=0)[2],
                     'lat': lat,
                     'lon': lon,
-                    'alt': alt
+                    'alt': alt,
+                    'date': date
                     })
                  
