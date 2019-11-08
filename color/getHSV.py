@@ -4,7 +4,7 @@ import csv
 import os
 
 # working directory with files 
-filelist = os.listdir('/Users/austinarrington/citizenScience/imgScrape')
+filelist = os.listdir('/Users/austinarrington/citizenScience/color')
 print (filelist)
 # now take out file that aren't jpgs 
 for file in filelist[:]: # filelist[:] makes a copy of filelist.
