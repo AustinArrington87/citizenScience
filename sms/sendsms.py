@@ -9,6 +9,14 @@ TWILIO_SMS_URL = "https://api.twilio.com/2010-04-01/Accounts/{}/Messages.json"
 TWILIO_ACCOUNT_SID = os.environ.get("TWILIO_ACCOUNT_SID")
 TWILIO_AUTH_TOKEN = os.environ.get("TWILIO_AUTH_TOKEN")
 
+"""
+Test event 
+{
+  "To": "+18144047040",
+  "From": "+17174475615",
+  "Body": "This is a test yo"
+}
+"""
 
 def lambda_handler(event, context):
     to_number = event['To']
