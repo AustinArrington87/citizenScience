@@ -6,8 +6,8 @@ import csv
 import os
 # enter flickr API key and secret
 # create API Key here: https://www.flickr.com/services/apps/create/apply
-api_key = 'db50051d6fd86734917c89ddffc01d04'
-api_secret = '421bcb14a3e801e7'
+api_key = 'ENTER api_key'
+api_secret = 'ENTER api_secret'
 flickr=flickrapi.FlickrAPI(api_key, api_secret, cache=True)
 
 # filter search by keyword to further limit scope of query 
