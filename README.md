@@ -6,3 +6,37 @@ imgScrape/imgScrape.py scrapes images from the Flickr API using bounding box, ke
 hueScraper.py scrapes images and then converts all images into Hue Sturation Brightness values. 
 
 These scripts can be utilized for mining and analyzing images of the natural world through citizen science. Have fun! 
+
+==========================
+The sms folder holds a Django web app for processing mms / sms data from Twilio. This functionality is used for processing img data sent from the field to our Twilio number. 
+
+1. Clone repo 
+
+$ git clone https://github.com/AustinArrington87/citizenScience.git
+
+2. Install dependencies
+$ pip install flask
+$ pip install requests
+$ pip install twilio
+
+
+3. Update directory path in app.py
+
+4. For testing on local ownload ngrok https://ngrok.com/download and drag the zipped folder into sms subdirectory
+$ unzip /path/to/ngrok.zip
+$ ./ngrok authtoken <YOUR_AUTH_TOKEN>
+
+5. Run the web app 
+$ cd citizenScience/sms
+$ python app.py
+$ ./ngrok http 5000
+
+6. Configure Twilo
+- Purchase phone number on Twilio
+- Go to Phone Numbers / Manage Numbers / Active Numbers
+- Click on your phone number, takes you to "Configue". Scrol to bottom of page to Messaging section
+- In "a message comes in section" change dropdown field to "Webhook", pasted in your ngrok url with /sms added (like this: http://xxxxxxxxngrok.io/sms) (HTTP POST)
+- Save changes. Text an image to your number. You will get a confirmation message and find the image in /sms/img folder! 
+
+
+
