@@ -2,6 +2,8 @@ import requests
 from flask import Flask, request, redirect
 from twilio.twiml.messaging_response import MessagingResponse
 
+# api documentation: https://www.twilio.com/docs/sms/twiml
+
 DOWNLOAD_DIRECTORY = '/Users/austinarrington/citizenScience/sms/img'
 app = Flask(__name__)
 
@@ -15,13 +17,16 @@ def sms_reply():
         
         # use message SID as file name
         filename = request.values['MessageSid']+'.jpg'
+        textBody = request.values['Body']
+        print(filename)
+        print(textBody)
         with open('{}/{}'.format(DOWNLOAD_DIRECTORY, filename), 'wb') as f:
             image_url = request.values['MediaUrl0']
             f.write(requests.get(image_url).content)
             
             resp.message("We are processing your image for SOC!")
     else:
-        resp.message("Try sending a picture message/")
+        resp.message("Try sending a picture message")
     
     return str(resp)
 
