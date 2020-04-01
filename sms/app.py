@@ -48,7 +48,7 @@ def sms_reply():
         #print(file)
         if file == filename:
             print(file)
-            img = cv2.imread(file,1)
+            img = cv2.imread(filename)
             print(img)
     
     
