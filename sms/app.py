@@ -42,13 +42,16 @@ def sms_reply():
     for file in filelist:
         if file == filename:
             target_file = file
+            print("Target File: " + str(target_file))
         else:
             pass
     
-    print("TargetFile: " + str(target_file))
+    #print("TargetFile: " + str(target_file))
+    #img = cv2.imread("MMa7ed0dc8ffedb98925712188b50d381c.jpg")
+    #hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
+    #print(hsv)
     
     return str(resp)
-
 
 if __name__ == "__main__":
     app.run(debug=True)
