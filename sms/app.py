@@ -42,6 +42,13 @@ def sms_reply():
      # now send prediction
     filelist = os.listdir(DOWNLOAD_DIRECTORY)
     #print(filelist)
+    fileLen = len(filelist)
+    # get hsv values
+    for i, file in enumerate(filelist):
+        #print(file)
+        if file == filename:
+            print(file)
+
     
     return str(resp)
 
