@@ -1,6 +1,9 @@
 import requests
 from flask import Flask, request, redirect
 from twilio.twiml.messaging_response import MessagingResponse
+import os
+import cv2
+import numpy as np
 
 # documentation: https://www.twilio.com/docs/sms/twiml
 
@@ -33,12 +36,12 @@ def sms_reply():
         with open('/Users/austinarrington/citizenScience/sms/img/metadata/'+textFile, 'a') as output:
             output.write(request.values['Body'])
         
-        #outText = open(textFile, "w")
-        #outText.write(request.values['Body'])
-        #outText.close()
-        
     else:
         resp.message("Try sending a picture message/")
+    
+     # now send prediction
+    filelist = os.listdir(DOWNLOAD_DIRECTORY)
+    #print(filelist)
     
     return str(resp)
 
