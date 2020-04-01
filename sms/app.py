@@ -46,14 +46,21 @@ def sms_reply():
         else:
             pass
     
-    #print("TargetFile: " + str(target_file))
-    #img = cv2.imread("MMa7ed0dc8ffedb98925712188b50d381c.jpg")
-    #hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
-    #print(hsv)
-    
+    # calculate hue, sat, brightness
     img = cv2.imread('/Users/austinarrington/citizenScience/sms/img/'+str(target_file))
     hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
     #print(hsv)
+    # calculate average color of each row of image
+    avg_color_per_row = np.average(hsv, axis=0)
+    # calculate the average of rows
+    avg_colors = np.average(avg_color_per_row, axis=0)
+    
+    hue = avg_colors[0]
+    sat = avg_colors[1]
+    val = avg_colors[2]
+    print("Hue: " + str(hue))
+    print("Sat: " + str(sat))
+    print("Brightness: " + str(val))
     
     return str(resp)
 
