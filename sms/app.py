@@ -51,6 +51,10 @@ def sms_reply():
     #hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
     #print(hsv)
     
+    img = cv2.imread('/Users/austinarrington/citizenScience/sms/img/'+str(target_file))
+    hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
+    #print(hsv)
+    
     return str(resp)
 
 if __name__ == "__main__":
