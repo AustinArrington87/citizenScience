@@ -62,6 +62,9 @@ def sms_reply():
     print("Sat: " + str(sat))
     print("Brightness: " + str(val))
     
+    SOC = round((0.0781*hue) + 1.74, 2)
+    print("SOC (%): " + str(SOC))
+    
     return str(resp)
 
 if __name__ == "__main__":
