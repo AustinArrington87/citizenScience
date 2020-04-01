@@ -29,7 +29,7 @@ def sms_reply():
         with open('{}/{}'.format(DOWNLOAD_DIRECTORY, filename), 'wb') as f:
             image_url = request.values['MediaUrl0']
             f.write(requests.get(image_url).content)
-            resp.message("We are processing your image for SOC!")
+            #resp.message("We are processing your image for SOC!")
       
         # txt metadata
         with open('/Users/austinarrington/citizenScience/sms/img/metadata/'+textFile, 'a') as output:
@@ -64,6 +64,8 @@ def sms_reply():
     
     SOC = round((0.0781*hue) + 1.74, 2)
     print("SOC (%): " + str(SOC))
+    
+    resp.message("Soil organic carbon (SOC) analysis complete. SOC (%): " + str(SOC))
     
     return str(resp)
 
