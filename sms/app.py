@@ -29,9 +29,8 @@ def sms_reply():
         with open('{}/{}'.format(DOWNLOAD_DIRECTORY, filename), 'wb') as f:
             image_url = request.values['MediaUrl0']
             f.write(requests.get(image_url).content)
-            
             resp.message("We are processing your image for SOC!")
-        
+      
         # txt metadata
         with open('/Users/austinarrington/citizenScience/sms/img/metadata/'+textFile, 'a') as output:
             output.write(request.values['Body'])
@@ -39,15 +38,17 @@ def sms_reply():
     else:
         resp.message("Try sending a picture message/")
     
-     # now send prediction
     filelist = os.listdir(DOWNLOAD_DIRECTORY)
-    #print(filelist)
     for file in filelist:
         if file == filename:
-            print(file)
-            print(cv2.imread(file))
+            target_file = file
+        else:
+            pass
+    
+    print("TargetFile: " + str(target_file))
     
     return str(resp)
+
 
 if __name__ == "__main__":
     app.run(debug=True)
