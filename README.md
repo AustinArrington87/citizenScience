@@ -7,8 +7,13 @@ hueScraper.py scrapes images and then converts all images into Hue Sturation Bri
 
 These scripts can be utilized for mining and analyzing images of the natural world through citizen science. Have fun! 
 
-==========================
+SMS 
+
 The sms folder holds a Django web app for processing mms / sms data from Twilio. This functionality is used for processing img data sent from the field to our Twilio number. 
+
+Twilio documentation: 
+https://www.twilio.com/docs/sms/twiml
+https://www.twilio.com/blog/2018/05/how-to-receive-and-download-picture-messages-in-python-with-twilio-mms.html
 
 1. Clone repo 
 

@@ -6,6 +6,7 @@ import cv2
 import numpy as np
 
 # documentation: https://www.twilio.com/docs/sms/twiml
+# https://www.twilio.com/blog/2018/05/how-to-receive-and-download-picture-messages-in-python-with-twilio-mms.html
 
 DOWNLOAD_DIRECTORY = '/Users/austinarrington/citizenScience/sms/img'
 META_DIRECTORY = '/Users/austinarrington/citizenScience/sms/img/metadata'
