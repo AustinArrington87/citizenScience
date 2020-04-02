@@ -36,7 +36,7 @@ def sms_reply():
             output.write(request.values['Body'])
         
     else:
-        resp.message("Try sending a picture message/")
+        resp.message("Please resend your image. Email info@plantgroup.co for customer support.")
     
     filelist = os.listdir(DOWNLOAD_DIRECTORY)
     for file in filelist:
