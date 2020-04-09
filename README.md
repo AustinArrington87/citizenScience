@@ -7,6 +7,8 @@ hueScraper.py scrapes images and then converts all images into Hue Sturation Bri
 
 These scripts can be utilized for mining and analyzing images of the natural world through citizen science. Have fun! 
 
+color/correction:   uses Darksky and pysolar to find context (sun angle + cloud cover) for color normilization of outdoor photos
+
 SMS 
 
 The sms folder holds a Django web app for processing mms / sms data from Twilio. This functionality is used for processing img data sent from the field to our Twilio number. 
