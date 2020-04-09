@@ -30,7 +30,7 @@ rad = radiation.get_radiation_direct(date, alt)
 print("radiation: " + str(rad))
 
 # calculate cloud cover
-DS_api = "https://api.darksky.net/forecast/"+ds_key+"/42.3601,-71.0589,"+str(timestamp)+"?exclude=currently,flags"
+DS_api = "https://api.darksky.net/forecast/"+ds_key+"/"+str(latitude)+","+str(longitude)+","+str(timestamp)+"?exclude=currently,flags"
 
 req =  requests.get(DS_api)
 res = req.json()
