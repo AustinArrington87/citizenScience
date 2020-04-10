@@ -4,12 +4,16 @@ from twilio.twiml.messaging_response import MessagingResponse
 import os
 import cv2
 import numpy as np
+import datetime, time
 
 # documentation: https://www.twilio.com/docs/sms/twiml
 # https://www.twilio.com/blog/2018/05/how-to-receive-and-download-picture-messages-in-python-with-twilio-mms.html
 
 DOWNLOAD_DIRECTORY = '/Users/austinarrington/citizenScience/sms/img'
 META_DIRECTORY = '/Users/austinarrington/citizenScience/sms/img/metadata'
+# darksky
+ds_key = os.environ["ds_key"]
+#ds_key = os.environ["4220aeb6ebb11c7abd00a31ae35cab06"]
 
 app = Flask(__name__)
 
@@ -27,12 +31,45 @@ def sms_reply():
         textFile = request.values['MessageSid']+'.txt'
         print(filename)
         print(textBody)
+        # parse txt file for lat lon
+        try:
+            textLines = textBody.split()
+            lat = textLines[0]
+            try:
+                lat = lat.rstrip(',')
+            except:
+                lat = lat
+            lon = textLines[1]
+            if lat != None:
+                print("Lat: " + str(lat))
+            if lon != None:
+                print("Lon: " + str(lon))
+        except:
+            print("Can't parse lat/lon from metadata")
+        # get current time 
+        date = datetime.datetime.now()
+        timestamp = int(date.timestamp())
+        print("timestamp: " + str(timestamp))
+        # darksky api call for cloud cover & visibility
+        try:
+            DS_api = "https://api.darksky.net/forecast/"+ds_key+"/"+str(lat)+","+str(lon)+","+str(timestamp)+"?exclude=currently,flags"
+            req =  requests.get(DS_api)
+            res = req.json()
+            #print(res)
+            cloudCover = res['daily']['data'][0]['cloudCover']
+            print("cloudCover: " + str(cloudCover))
+            visibility = res['daily']['data'][0]['visibility']
+            print("Visibility: " + str(visibility))
+        except:
+            print("Darksky api call failed")
+        
+        # save image file to local directory 
         with open('{}/{}'.format(DOWNLOAD_DIRECTORY, filename), 'wb') as f:
             image_url = request.values['MediaUrl0']
             f.write(requests.get(image_url).content)
             #resp.message("We are processing your image for SOC!")
       
-        # txt metadata
+        # SMS txt metadata
         with open('/Users/austinarrington/citizenScience/sms/img/metadata/'+textFile, 'a') as output:
             output.write(request.values['Body'])
         

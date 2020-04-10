@@ -14,14 +14,14 @@ print("DS: " + ds_key)
 #latitude = 39.7391536
 #longitude = -104.9847034
 
-latitude = 33.3936472
-longitude = -86.676667
+latitude = 38.9029278
+longitude = -76.885033
 
 #date = datetime.datetime.now()
 # current_time = datetime.datetime.now(datetime.timezone.utc)
 # yr, month, day, hour, sec, microsec
 #date = datetime.datetime(2007, 2, 18, 15, 13, 1, 130320, tzinfo=datetime.timezone.utc)
-date = datetime.datetime(2019, 12, 1, 16, 19, 52, tzinfo=datetime.timezone.utc)
+date = datetime.datetime(2019, 11, 11, 14, 58, 22, tzinfo=datetime.timezone.utc)
 print("Date: " + str(date))
 # also get UNIX timestamp for Darsky
 timestamp = int(date.timestamp())
@@ -41,6 +41,9 @@ DS_api = "https://api.darksky.net/forecast/"+ds_key+"/"+str(latitude)+","+str(lo
 
 req =  requests.get(DS_api)
 res = req.json()
+#dataLoad = res['daily']['data'][0]
+#print(dataLoad)
 cloudCover = res['daily']['data'][0]['cloudCover']
-print(cloudCover)
-
+print("cloudCover: " + str(cloudCover))
+visibility = res['daily']['data'][0]['visibility']
+print("Visibility: " + str(visibility))
