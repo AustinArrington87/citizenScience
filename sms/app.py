@@ -5,6 +5,8 @@ import os
 import cv2
 import numpy as np
 import datetime, time
+from pysolar.solar import *
+from pysolar.radiation import *
 
 # documentation: https://www.twilio.com/docs/sms/twiml
 # https://www.twilio.com/blog/2018/05/how-to-receive-and-download-picture-messages-in-python-with-twilio-mms.html
@@ -47,9 +49,22 @@ def sms_reply():
         except:
             print("Can't parse lat/lon from metadata")
         # get current time 
-        date = datetime.datetime.now()
+        date = datetime.datetime.now(datetime.timezone.utc)
+        print("date: " + str(date))
         timestamp = int(date.timestamp())
         print("timestamp: " + str(timestamp))
+        # get solar angle info
+        try:
+            lat_num = float(lat)
+            lon_num = float(lon)
+            alt = round(get_altitude(lat_num, lon_num, date), 2)
+            print("alt: " + str(alt))
+            azimuth = round(get_azimuth(lat_num, lon_num, date), 2)
+            print("azimuth: " + str(azimuth))
+            rad = round(radiation.get_radiation_direct(date, alt), 2)
+            print("radiation: " + str(rad))
+        except:
+            print("Can't get solar angle info...")
         # darksky api call for cloud cover & visibility
         try:
             DS_api = "https://api.darksky.net/forecast/"+ds_key+"/"+str(lat)+","+str(lon)+","+str(timestamp)+"?exclude=currently,flags"
