@@ -88,6 +88,11 @@ def sms_reply():
         with open('/Users/austinarrington/citizenScience/sms/img/metadata/'+textFile, 'a') as output:
             output.write(request.values['Body'])
         
+        # save light context data
+        with open('/Users/austinarrington/citizenScience/sms/img/light_data/'+textFile, 'a') as output:
+            output.write('{}\n{}\n'.format(str(cloudCover),str(visibility)))
+            
+        
     else:
         resp.message("Please resend your image. Email info@plantgroup.co for customer support.")
     
