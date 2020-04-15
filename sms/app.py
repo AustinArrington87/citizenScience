@@ -89,8 +89,11 @@ def sms_reply():
             output.write(request.values['Body'])
         
         # save light context data
-        with open('/Users/austinarrington/citizenScience/sms/img/light_data/'+textFile, 'a') as output:
-            output.write('{}\n{}\n{}\n{}\n{}\n'.format(str(alt),str(azimuth),str(rad),str(cloudCover),str(visibility)))
+        try:
+            with open('/Users/austinarrington/citizenScience/sms/img/light_data/'+textFile, 'a') as output:
+                output.write('{}\n{}\n{}\n{}\n{}\n'.format(str(alt),str(azimuth),str(rad),str(cloudCover),str(visibility)))
+        except:
+            print("Could not collect light context data, no valid coordinates passed...")
             
         
     else:
