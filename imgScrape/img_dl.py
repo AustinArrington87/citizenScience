@@ -10,6 +10,7 @@ import time
 import urllib.request
 import os
 from selenium.webdriver.common.keys import Keys
+import csv
 
 browser = webdriver.Chrome("/Users/austinarrington/chromedriver")
 browser.get("https://www.google.com/")
@@ -17,6 +18,20 @@ browser.get("https://www.google.com/")
 search = browser.find_element_by_name('q')
 
 # get search bar field from Google
+
+#  nest this whole thing in for loop 
+# convert species name CSV row as numpy array 
+speciesName = []
+with open('PlantFinder.csv', mode='r') as f:
+    reader = csv.reader(f, delimiter=',')
+    for n, row in enumerate(reader):
+        if not n: #skip header
+            continue
+        speciesName.append(row[1])
+
+print("Done importing species names...")
+print("Species 1: " + str(speciesName[0]))
+
 key_words = "Anisocampium niponicum"
 search.send_keys(key_words,Keys.ENTER)
 # click on Images page
