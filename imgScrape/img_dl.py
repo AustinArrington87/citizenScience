@@ -12,15 +12,52 @@ import os
 from selenium.webdriver.common.keys import Keys
 import csv
 
-browser = webdriver.Chrome("/Users/austinarrington/chromedriver")
-browser.get("https://www.google.com/")
 
-search = browser.find_element_by_name('q')
-
-# get search bar field from Google
-
-#  nest this whole thing in for loop 
 # convert species name CSV row as numpy array 
+
+def imgDownload(key_words):   
+    browser = webdriver.Chrome("/Users/austinarrington/chromedriver")
+    browser.get("https://www.google.com/")
+
+    search = browser.find_element_by_name('q')
+
+    #key_words = "Anisocampium niponicum"
+    search.send_keys(key_words,Keys.ENTER)
+    # click on Images page
+    elem = browser.find_element_by_link_text('Images')
+    elem.get_attribute('href')
+    elem.click()
+
+    #comment out for teting
+    sub = browser.find_elements_by_tag_name("img")
+    # create folder  for downloads  
+    try:
+        os.mkdir('downloads')
+    except FileExistsError:
+        pass
+
+    # extract random image -- just make sure it's not 1.jpg (Google Logo)
+
+    # subsample of results 
+    for i in sub[1:10]:
+        src = i.get_attribute('src')
+        try:
+            if src != None:
+                src = str(src)
+                print(src)
+                urllib.request.urlretrieve(src, os.path.join('downloads','image'+str(5)+'.jpg'))
+                # rename img name to species name
+            else:
+                raise TypeError
+        except TypeError:
+            print('Fail')
+
+    # rename image to species name 
+    dst = '/Users/austinarrington/citizenScience/imgScrape/downloads/'+key_words+'.jpg'
+    src = '/Users/austinarrington/citizenScience/imgScrape/downloads/'+'image5.jpg'
+    os.rename(src, dst)
+
+
 speciesName = []
 with open('PlantFinder.csv', mode='r') as f:
     reader = csv.reader(f, delimiter=',')
@@ -30,44 +67,7 @@ with open('PlantFinder.csv', mode='r') as f:
         speciesName.append(row[1])
 
 print("Done importing species names...")
-print("Species 1: " + str(speciesName[0]))
-
-key_words = "Anisocampium niponicum"
-search.send_keys(key_words,Keys.ENTER)
-# click on Images page
-elem = browser.find_element_by_link_text('Images')
-elem.get_attribute('href')
-elem.click()
-
-#comment out for teting
-sub = browser.find_elements_by_tag_name("img")
-# create folder  for downloads  
-try:
-    os.mkdir('downloads')
-except FileExistsError:
-    pass
-
-# extract random image -- just make sure it's not 1.jpg (Google Logo)
-
-# subsample of results 
-for i in sub[1:10]:
-    src = i.get_attribute('src')
-    try:
-        if src != None:
-            src = str(src)
-            print(src)
-            urllib.request.urlretrieve(src, os.path.join('downloads','image'+str(5)+'.jpg'))
-            # rename img name to species name
-        else:
-            raise TypeError
-    except TypeError:
-        print('Fail')
-
-# rename image to species name 
-dst = '/Users/austinarrington/citizenScience/imgScrape/downloads/'+key_words+'.jpg'
-src = '/Users/austinarrington/citizenScience/imgScrape/downloads/'+'image5.jpg'
-os.rename(src, dst)
-
-
-
+for name in speciesName:
+    print(name)
+    imgDownload(name)
 
