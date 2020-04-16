@@ -16,7 +16,6 @@ browser.get("https://www.google.com/")
 
 search = browser.find_element_by_name('q')
 
-
 # get search bar field from Google
 key_words = "Anisocampium niponicum"
 search.send_keys(key_words,Keys.ENTER)
@@ -48,11 +47,11 @@ for i in sub[1:10]:
             raise TypeError
     except TypeError:
         print('Fail')
-    
 
-
-
-
+# rename image to species name 
+dst = '/Users/austinarrington/citizenScience/imgScrape/downloads/'+key_words+'.jpg'
+src = '/Users/austinarrington/citizenScience/imgScrape/downloads/'+'image5.jpg'
+os.rename(src, dst)
 
 
 
