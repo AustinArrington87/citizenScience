@@ -56,6 +56,8 @@ def imgDownload(key_words):
     dst = '/Users/austinarrington/citizenScience/imgScrape/downloads/'+key_words+'.jpg'
     src = '/Users/austinarrington/citizenScience/imgScrape/downloads/'+'image5.jpg'
     os.rename(src, dst)
+    # close browser
+    browser.close()
 
 
 speciesName = []
