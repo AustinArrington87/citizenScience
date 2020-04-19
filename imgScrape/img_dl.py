@@ -1,7 +1,4 @@
-#  https://medium.com/@reddy.incognito/download-images-from-google-using-python-20d6588fc3f1
-
 # Selenium WebDriver drives a browser natively, as a real user would, either locally or on remote machines.
-
 # https://www.selenium.dev/projects/
 # https://chromedriver.chromium.org/downloads  --> if using Chrome, download this web driver and save to your directory of choice
 
