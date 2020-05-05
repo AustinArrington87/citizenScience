@@ -14,7 +14,6 @@ DOWNLOAD_DIRECTORY = '/Users/austinarrington/citizenScience/sms/img'
 META_DIRECTORY = '/Users/austinarrington/citizenScience/sms/img/metadata'
 # darksky
 ds_key = os.environ["ds_key"]
-#ds_key = os.environ["4220aeb6ebb11c7abd00a31ae35cab06"]
 
 app = Flask(__name__)
 
