@@ -121,10 +121,15 @@ def sms_reply():
     print("Sat: " + str(sat))
     print("Brightness: " + str(val))
     
+    # soil organic matter
+    SOM = round((0.133*hue) + 2.96, 2)
+    # soil organic carbon
     SOC = round((0.0781*hue) + 1.74, 2)
+    
+    print("SOM (%): " + str(SOM))
     print("SOC (%): " + str(SOC))
     
-    resp.message("Soil organic carbon (SOC) analysis complete. SOC (%): " + str(SOC))
+    resp.message("Soil organic matter (SOM) and soil organic carbon (SOC) analysis complete.\n SOM (%): " + str(SOM) + "\n SOC (%): " + str(SOC))
     
     return str(resp)
 
