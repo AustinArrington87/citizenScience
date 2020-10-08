@@ -7,6 +7,7 @@ import numpy as np
 import datetime, time
 from pysolar.solar import *
 from pysolar.radiation import *
+import csv
 
 # documentation: https://www.twilio.com/docs/sms/twiml
 
@@ -32,8 +33,8 @@ def sms_reply():
         print(filename)
         print(textBody)
         # parse txt file for lat lon
+        textLines = textBody.split()
         try:
-            textLines = textBody.split()
             lat = textLines[0]
             try:
                 lat = lat.rstrip(',')
@@ -45,7 +46,15 @@ def sms_reply():
             if lon != None:
                 print("Lon: " + str(lon))
         except:
+            lat = None
+            lon = None
             print("Can't parse lat/lon from metadata")
+        # get lab ID
+        try:
+            labID = textLines[2]
+        except:
+            labID = None
+            print("Can't find LabID")
         # get current time 
         date = datetime.datetime.now(datetime.timezone.utc)
         print("date: " + str(date))
@@ -62,6 +71,11 @@ def sms_reply():
             rad = round(radiation.get_radiation_direct(date, alt), 2)
             print("radiation: " + str(rad))
         except:
+            lat_num = None
+            lon_num = None
+            alt = None
+            azimuth = None
+            rad = None
             print("Can't get solar angle info...")
         # darksky api call for cloud cover & visibility
         try:
@@ -74,6 +88,8 @@ def sms_reply():
             visibility = res['daily']['data'][0]['visibility']
             print("Visibility: " + str(visibility))
         except:
+            cloudCover = None
+            visibility = None
             print("Darksky api call failed")
         
         # save image file to local directory 
@@ -128,6 +144,50 @@ def sms_reply():
     
     print("SOM (%): " + str(SOM))
     print("SOC (%): " + str(SOC))
+    
+    # write everything to CSV
+    try:
+        file_exists = os.path.isfile('soc.csv')
+        with open('soc.csv', 'a') as csvfile:
+            headers = ['id', 'time', 'lat', 'lon', 'h', 's', 'v', 'alt', 'az', 'rad', 'cc', 'vis', 'som', 'soc']
+            writer = csv.DictWriter(csvfile, delimiter=',', lineterminator='\n', fieldnames=headers)
+            if not file_exists:
+                writer.writeheader()
+                writer.writerow({
+                    'id': labID,
+                    'time': timestamp,
+                    'lat': lat,
+                    'lon': lon,
+                    'h': hue,
+                    's': sat,
+                    'v': val,
+                    'alt': alt,
+                    'az': azimuth,
+                    'rad': rad,
+                    'cc': cloudCover,
+                    'vis': visibility,
+                    'som': SOM,
+                    'soc': SOC
+                })
+            if file_exists:
+                writer.writerow({
+                    'id': labID,
+                    'time': timestamp,
+                    'lat': lat,
+                    'lon': lon,
+                    'h': hue,
+                    's': sat,
+                    'v': val,
+                    'alt': alt,
+                    'az': azimuth,
+                    'rad': rad,
+                    'cc': cloudCover,
+                    'vis': visibility,
+                    'som': SOM,
+                    'soc': SOC
+                })
+    except:
+        pass
     
     resp.message("Soil organic matter (SOM) and soil organic carbon (SOC) analysis complete.\n SOM (%): " + str(SOM) + "\n SOC (%): " + str(SOC))
     
