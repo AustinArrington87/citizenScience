@@ -6,7 +6,17 @@ import csv
 import os
 from GPSPhoto import gpsphoto
 from PIL import Image
+import datetime, time
+from pysolar.solar import *
+from pysolar.radiation import *
+import requests
 
+# weather API key 
+ds_key = os.environ["ds_key"]
+
+# dateTime
+dateNow = datetime.datetime.now(datetime.timezone.utc)
+print(dateNow)
 # working directory with files 
 filelist = os.listdir('/Users/austinarrington/citizenScience/color')
 print (filelist)
@@ -33,17 +43,16 @@ for i, file in enumerate(filelist):
     hue = avg_colors[0]
     sat = avg_colors[1]
     val = avg_colors[2]
-
-    print("Hue: " + str(hue))
-    print("Saturation: " + str(sat))
-    print("Brightness: " + str(val))
+    #print("Hue: " + str(hue))
+    #print("Saturation: " + str(sat))
+    #print("Brightness: " + str(val))
     
     # print values to CSV 
     listLen = len(avg_colors)
     #print(listLen)
     file_exists = os.path.isfile('img-hsv.csv')
     with open('img-hsv.csv', 'a') as csvfile:
-        headers = ['file', 'hue', 'saturation', 'brightness', 'lat', 'lon', 'alt', 'date']
+        headers = ['file', 'hue', 'saturation', 'brightness', 'lat', 'lon', 'alt', 'date', 'make', 'model', 'aperature', 'azimuth', 'radiation', 'cloudCover', 'visibility', 'precipProb']
         writer = csv.DictWriter(csvfile, delimiter=',', lineterminator='\n', fieldnames=headers)
         if not file_exists:
             writer.writeheader()
@@ -58,11 +67,44 @@ for i, file in enumerate(filelist):
                     lat = None
                     lon = None
                     alt = None
-                # Date
+                # Extract image metadata
                 try:
                     date = Image.open(file)._getexif()[36867]
+                    manufacturer = Image.open(file)._getexif()[271]
+                    model = Image.open(file)._getexif()[272]
+                    aperature = Image.open(file)._getexif()[33437]
                 except:
                     date = None
+                    manufacturer = None
+                    model = None
+                    aperature = None
+                # solar context metadata
+                date_obj = datetime.datetime.strptime(date,'%Y:%m:%d %H:%M:%S')
+                date_obj.replace(tzinfo = datetime.timezone.utc)
+                unix_ts = int(date_obj.timestamp())
+                print(unix_ts)
+                try:
+                    azimuth = round(get_azimuth(lat, lon, date_obj), 2)
+                    rad = round(radiation.get_radiation_direct(date_obj, alt), 2)
+                except:
+                    azimuth = None
+                    rad = None
+                # Weather context data 
+                try:
+                    DS_api = "https://api.darksky.net/forecast/"+ds_key+"/"+str(lat)+","+str(lon)+","+str(unix_ts)+"?exclude=currently,flags"
+                    req = requests.get(DS_api)
+                    res = req.json()
+                    #print(res)
+                    cloudCover = res['daily']['data'][0]['cloudCover']
+                    visibility = res['daily']['data'][0]['visibility']
+                    precipProb = res['daily']['data'][0]['precipProbability']
+                except:
+                    cloudCover = None
+                    visibility = None
+                    precipProb = None
+                    print("Error with weather API call")
+                    
+                    
                 writer.writerow({
                     'file': file,
                     'hue': np.average(np.average(cv2.cvtColor(cv2.imread(file), cv2.COLOR_BGR2HSV), axis=0), axis=0)[0],
@@ -71,6 +113,14 @@ for i, file in enumerate(filelist):
                     'lat': lat,
                     'lon': lon,
                     'alt': alt,
-                    'date': date
+                    'date': date,
+                    'make': manufacturer,
+                    'model': model,
+                    'aperature': aperature,
+                    'azimuth': azimuth,
+                    'radiation': rad,
+                    'cloudCover': cloudCover,
+                    'visibility': visibility,
+                    'precipProb': precipProb
                     })
                  
