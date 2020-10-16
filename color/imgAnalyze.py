@@ -43,16 +43,16 @@ for i, file in enumerate(filelist):
     hue = avg_colors[0]
     sat = avg_colors[1]
     val = avg_colors[2]
-    #print("Hue: " + str(hue))
-    #print("Saturation: " + str(sat))
-    #print("Brightness: " + str(val))
+    print("Hue: " + str(hue))
+    print("Saturation: " + str(sat))
+    print("Brightness: " + str(val))
     
     # print values to CSV 
     listLen = len(avg_colors)
     #print(listLen)
     file_exists = os.path.isfile('img-hsv.csv')
     with open('img-hsv.csv', 'a') as csvfile:
-        headers = ['file', 'hue', 'saturation', 'brightness', 'lat', 'lon', 'alt', 'date', 'make', 'model', 'aperature', 'azimuth', 'radiation', 'cloudCover', 'visibility', 'precipProb']
+        headers = ['file', 'hue', 'saturation', 'brightness', 'lat', 'lon', 'alt', 'date', 'make', 'model', 'aperature', 'azimuth', 'radiation', 'cloudCover', 'visibility', 'precipProb', 'som', 'soc']
         writer = csv.DictWriter(csvfile, delimiter=',', lineterminator='\n', fieldnames=headers)
         if not file_exists:
             writer.writeheader()
@@ -82,7 +82,7 @@ for i, file in enumerate(filelist):
                 date_obj = datetime.datetime.strptime(date,'%Y:%m:%d %H:%M:%S')
                 date_obj.replace(tzinfo = datetime.timezone.utc)
                 unix_ts = int(date_obj.timestamp())
-                print(unix_ts)
+                #print(unix_ts)
                 try:
                     azimuth = round(get_azimuth(lat, lon, date_obj), 2)
                     rad = round(radiation.get_radiation_direct(date_obj, alt), 2)
@@ -103,8 +103,7 @@ for i, file in enumerate(filelist):
                     visibility = None
                     precipProb = None
                     print("Error with weather API call")
-                    
-                    
+                        
                 writer.writerow({
                     'file': file,
                     'hue': np.average(np.average(cv2.cvtColor(cv2.imread(file), cv2.COLOR_BGR2HSV), axis=0), axis=0)[0],
@@ -121,6 +120,8 @@ for i, file in enumerate(filelist):
                     'radiation': rad,
                     'cloudCover': cloudCover,
                     'visibility': visibility,
-                    'precipProb': precipProb
+                    'precipProb': precipProb,
+                    'som': (0.133*(np.average(np.average(cv2.cvtColor(cv2.imread(file), cv2.COLOR_BGR2HSV), axis=0), axis=0)[0])) + 2.96,
+                    'soc': (0.0781*(np.average(np.average(cv2.cvtColor(cv2.imread(file), cv2.COLOR_BGR2HSV), axis=0), axis=0)[0])) + 1.74
                     })
                  
