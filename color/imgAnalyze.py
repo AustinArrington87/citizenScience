@@ -1,5 +1,5 @@
 #  Developed by Austin Arrington
-#  Copyright - 2019
+#  Copyright - 2020
 import cv2 
 import numpy as np 
 import csv
@@ -30,10 +30,7 @@ def SOC (file):
         soc = 5.81
     return round(soc,4)
 
-# dateTime
-dateNow = datetime.datetime.now(datetime.timezone.utc)
-print(dateNow)
-# working directory with files -- update this line 
+#image directory 
 filelist = os.listdir('/Users/austinarrington/citizenScience/color')
 print (filelist)
 # now take out file that aren't jpgs 
