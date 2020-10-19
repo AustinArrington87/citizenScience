@@ -11,13 +11,29 @@ from pysolar.solar import *
 from pysolar.radiation import *
 import requests
 
-# weather API key 
+# Darksky weather API key 
 ds_key = os.environ["ds_key"]
+
+# Soil organic matter predictor 
+
+def SOM (file):
+    som = (0.133*(np.average(np.average(cv2.cvtColor(cv2.imread(file), cv2.COLOR_BGR2HSV), axis=0), axis=0)[0])) + 2.96
+    if som > 10:
+        som = 10
+    return round(som,4) 
+
+# soil organic carbon predictor 
+
+def SOC (file):
+    soc = (0.0772*(np.average(np.average(cv2.cvtColor(cv2.imread(file), cv2.COLOR_BGR2HSV), axis=0), axis=0)[0])) + 1.72
+    if soc > 5.81:
+        soc = 5.81
+    return round(soc,4)
 
 # dateTime
 dateNow = datetime.datetime.now(datetime.timezone.utc)
 print(dateNow)
-# working directory with files 
+# working directory with files -- update this line 
 filelist = os.listdir('/Users/austinarrington/citizenScience/color')
 print (filelist)
 # now take out file that aren't jpgs 
@@ -121,7 +137,7 @@ for i, file in enumerate(filelist):
                     'cloudCover': cloudCover,
                     'visibility': visibility,
                     'precipProb': precipProb,
-                    'som': (0.133*(np.average(np.average(cv2.cvtColor(cv2.imread(file), cv2.COLOR_BGR2HSV), axis=0), axis=0)[0])) + 2.96,
-                    'soc': (0.0781*(np.average(np.average(cv2.cvtColor(cv2.imread(file), cv2.COLOR_BGR2HSV), axis=0), axis=0)[0])) + 1.74
+                    'som': SOM(file),
+                    'soc': SOC(file)
                     })
                  
