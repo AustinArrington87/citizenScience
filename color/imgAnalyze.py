@@ -92,9 +92,12 @@ for i, file in enumerate(filelist):
                     model = None
                     aperature = None
                 # solar context metadata
-                date_obj = datetime.datetime.strptime(date,'%Y:%m:%d %H:%M:%S')
-                date_obj.replace(tzinfo = datetime.timezone.utc)
-                unix_ts = int(date_obj.timestamp())
+                try:
+                    date_obj = datetime.datetime.strptime(date,'%Y:%m:%d %H:%M:%S')
+                    date_obj.replace(tzinfo = datetime.timezone.utc)
+                    unix_ts = int(date_obj.timestamp())
+                except:
+                    pass
                 #print(unix_ts)
                 try:
                     azimuth = round(get_azimuth(lat, lon, date_obj), 2)

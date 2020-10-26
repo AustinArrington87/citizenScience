@@ -139,9 +139,12 @@ def sms_reply():
     
     # soil organic matter
     SOM = round((0.133*hue) + 2.96, 2)
+    if SOM > 10:
+        SOM = 10
     # soil organic carbon
-    SOC = round((0.0781*hue) + 1.74, 2)
-    
+    SOC = round((0.0772*hue) + 1.72, 2)
+    if SOC > 5.8:
+        SOC = 5.8
     print("SOM (%): " + str(SOM))
     print("SOC (%): " + str(SOC))
     
