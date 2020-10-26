@@ -31,7 +31,7 @@ def SOC (file):
     return round(soc,4)
 
 #image directory 
-filelist = os.listdir('/Users/austinarrington/citizenScience/color')
+filelist = os.listdir('/Users/austinarrington/citizenScience/sms/img')
 print (filelist)
 # now take out file that aren't jpgs 
 for file in filelist[:]: # filelist[:] makes a copy of filelist.

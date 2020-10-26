@@ -8,6 +8,7 @@ import datetime, time
 from pysolar.solar import *
 from pysolar.radiation import *
 import csv
+from PIL import Image
 
 # documentation: https://www.twilio.com/docs/sms/twiml
 
@@ -77,6 +78,7 @@ def sms_reply():
             azimuth = None
             rad = None
             print("Can't get solar angle info...")
+        
         # darksky api call for cloud cover & visibility
         try:
             DS_api = "https://api.darksky.net/forecast/"+ds_key+"/"+str(lat)+","+str(lon)+","+str(timestamp)+"?exclude=currently,flags"
@@ -137,6 +139,9 @@ def sms_reply():
     print("Sat: " + str(sat))
     print("Brightness: " + str(val))
     
+    # img metadata
+    #dateCam = Image.open(labID+'.jpg')._getexif()[36867]
+    #manufacturer = Image.open(labID+'.jpg')._getexif()[271]
     # soil organic matter
     SOM = round((0.133*hue) + 2.96, 2)
     if SOM > 10:
