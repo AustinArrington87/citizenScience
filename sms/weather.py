@@ -8,7 +8,7 @@ import csv
 ds_key = os.environ["ds_key"]
 
 #date = datetime.datetime.now(datetime.timezone.utc)
-date_time_str = '2020-10-26 13:38:27.243860'
+date_time_str = '2020-10-26 20:09:27.243860'
 date_time_obj = datetime.datetime.strptime(date_time_str, '%Y-%m-%d %H:%M:%S.%f')
 
 print("Date Obj: " + str(date_time_obj))
@@ -17,8 +17,8 @@ print("timestamp: " + str(timestamp))
 
 
 # get solar angle info 
-lat = "40.5824068"
-lon = "-87.1249559"
+lat = "40.5833217"
+lon = "-87.1281196"
 
 try:
     lat_num = float(lat)
