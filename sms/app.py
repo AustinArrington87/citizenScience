@@ -142,22 +142,36 @@ def sms_reply():
     # img metadata
     #dateCam = Image.open(labID+'.jpg')._getexif()[36867]
     #manufacturer = Image.open(labID+'.jpg')._getexif()[271]
+    
     # soil organic matter
-    SOM = round((0.133*hue) + 2.96, 2)
-    if SOM > 10:
-        SOM = 10
-    # soil organic carbon
-    SOC = round((0.0772*hue) + 1.72, 2)
-    if SOC > 5.8:
-        SOC = 5.8
-    print("SOM (%): " + str(SOM))
-    print("SOC (%): " + str(SOC))
+#    SOM = round((0.133*hue) + 2.96, 2)
+#    if SOM > 10:
+#        SOM = 10
+#    # soil organic carbon
+#    SOC = round((0.0772*hue) + 1.72, 2)
+#    if SOC > 5.8:
+#        SOC = 5.8
+#    print("SOM (%): " + str(SOM))
+#    print("SOC (%): " + str(SOC))
+    
+    # Step 1: Calculate Percent Clay 
+    clayPercent = round((-0.0853*sat)+37.1,2)
+    # Step 2: Estimate SOC % 
+    SOC = round((0.05262*hue) + (0.11041*clayPercent) + -2.76983,2)
+    # Step 3: Convert SOC % to SOM %
+    SOM = round(SOC*1.72,2)
+    # Step 4: Estimate Bulk Density (g/cm3)
+    bulkDensity = round((0.0129651*clayPercent) + (0.0030006*sat) + 0.4401499,2)
+    # Step 5: Convert SOC % to SOC (t/ha)
+    # assume 6in as depth 
+    depth_cm = 6*2.54
+    SOC_vol = round((SOC*0.01)*(bulkDensity*(depth_cm/100)*10000),2)
     
     # write everything to CSV
     try:
         file_exists = os.path.isfile('soc.csv')
         with open('soc.csv', 'a') as csvfile:
-            headers = ['id', 'time', 'lat', 'lon', 'h', 's', 'v', 'alt', 'az', 'rad', 'cc', 'vis', 'som', 'soc']
+            headers = ['id', 'time', 'lat', 'lon', 'h', 's', 'v', 'alt', 'az', 'rad', 'cc', 'vis', 'som', 'soc', 'bd', 'soc_tha', 'clay']
             writer = csv.DictWriter(csvfile, delimiter=',', lineterminator='\n', fieldnames=headers)
             if not file_exists:
                 writer.writeheader()
@@ -175,7 +189,10 @@ def sms_reply():
                     'cc': cloudCover,
                     'vis': visibility,
                     'som': SOM,
-                    'soc': SOC
+                    'soc': SOC,
+                    'bd': bulkDensity,
+                    'soc_tha': SOC_vol,
+                    'clay': clayPercent
                 })
             if file_exists:
                 writer.writerow({
@@ -192,12 +209,15 @@ def sms_reply():
                     'cc': cloudCover,
                     'vis': visibility,
                     'som': SOM,
-                    'soc': SOC
+                    'soc': SOC,
+                    'bd': bulkDensity,
+                    'soc_tha': SOC_vol,
+                    'clay': clayPercent
                 })
     except:
         pass
     
-    resp.message("Soil organic matter (SOM) and soil organic carbon (SOC) analysis complete.\n SOM (%): " + str(SOM) + "\n SOC (%): " + str(SOC))
+    resp.message("Soil organic matter (SOM) and soil organic carbon (SOC) analysis complete.\n SOM (%): " + str(SOM) + "\n SOC (%): " + str(SOC) + "\n BD (g/cm3): " + str(bulkDensity) + "\n SOC (t/ha): " + str(SOC_vol))
     
     return str(resp)
 
