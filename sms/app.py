@@ -56,6 +56,12 @@ def sms_reply():
         except:
             labID = None
             print("Can't find LabID")
+        # get depth in inches
+        try:
+            depth = textLines[3]
+        except:
+            # assumed depth of 6in
+            depth = 6
         # get current time 
         date = datetime.datetime.now(datetime.timezone.utc)
         print("date: " + str(date))
@@ -164,14 +170,14 @@ def sms_reply():
     bulkDensity = round((0.0129651*clayPercent) + (0.0030006*sat) + 0.4401499,2)
     # Step 5: Convert SOC % to SOC (t/ha)
     # assume 6in as depth 
-    depth_cm = 6*2.54
+    depth_cm = int(depth)*2.54
     SOC_vol = round((SOC*0.01)*(bulkDensity*(depth_cm/100)*10000),2)
     
     # write everything to CSV
     try:
         file_exists = os.path.isfile('soc.csv')
         with open('soc.csv', 'a') as csvfile:
-            headers = ['id', 'time', 'lat', 'lon', 'h', 's', 'v', 'alt', 'az', 'rad', 'cc', 'vis', 'som', 'soc', 'bd', 'soc_tha', 'clay']
+            headers = ['id', 'time', 'lat', 'lon', 'h', 's', 'v', 'alt', 'az', 'rad', 'cc', 'vis', 'som', 'soc', 'depth', 'bd', 'soc_tha', 'clay']
             writer = csv.DictWriter(csvfile, delimiter=',', lineterminator='\n', fieldnames=headers)
             if not file_exists:
                 writer.writeheader()
@@ -190,6 +196,7 @@ def sms_reply():
                     'vis': visibility,
                     'som': SOM,
                     'soc': SOC,
+                    'depth': depth,
                     'bd': bulkDensity,
                     'soc_tha': SOC_vol,
                     'clay': clayPercent
@@ -210,6 +217,7 @@ def sms_reply():
                     'vis': visibility,
                     'som': SOM,
                     'soc': SOC,
+                    'depth': depth,
                     'bd': bulkDensity,
                     'soc_tha': SOC_vol,
                     'clay': clayPercent
@@ -217,7 +225,7 @@ def sms_reply():
     except:
         pass
     
-    resp.message("Soil organic matter (SOM) and soil organic carbon (SOC) analysis complete.\n SOM (%): " + str(SOM) + "\n SOC (%): " + str(SOC) + "\n BD (g/cm3): " + str(bulkDensity) + "\n SOC (t/ha): " + str(SOC_vol))
+    resp.message("Soil organic matter (SOM) and soil organic carbon (SOC) analyses for " + str(depth)+"in. depth complete.\n SOM (%): " + str(SOM) + "\n SOC (%): " + str(SOC) + "\n BD (g/cm3): " + str(bulkDensity) + "\n SOC (t/ha): " + str(SOC_vol))
     
     return str(resp)
 
